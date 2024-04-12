@@ -9,8 +9,12 @@ import SettingsScreen from './screens/SettingScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
+const settings = [{toolUri: 'http://192.168.68.171/ragTerminToolV1/public/'}];
 
 function HomeStack(){
+
+    console.log('HomeStack', settings);
+
     return (
         <Stack.Navigator 
             screenOptions={{
@@ -18,9 +22,9 @@ function HomeStack(){
             }} 
         >
             <Stack.Screen 
-                name='VorhabenListe' 
+                name='Übersicht der Vorhaben' 
                 component={VorhabenScreen}
-                options={{headerShown: false}}
+                
             />
             <Stack.Screen 
                 name='VorhabenDetails' 
@@ -31,7 +35,27 @@ function HomeStack(){
     )
 }
 
+function SettingStack(){
+
+    //console.log('SettingStack', settings);
+
+    return (
+        <Stack.Navigator 
+            screenOptions={{
+                headerStyle: {backgroundColor: 'aliceblue'},
+            }} 
+        >
+            <Stack.Screen 
+                name='Einstellungen' 
+                component={SettingsScreen}
+                
+            />
+        </Stack.Navigator>
+    )
+}
+
 export default function Navigation() {
+
     return(
       <NavigationContainer>
         <Tab.Navigator 
@@ -67,10 +91,10 @@ export default function Navigation() {
           />
           <Tab.Screen 
             name="Setting" 
-            component={SettingsScreen} 
+            component={SettingStack} 
             options={{
                 title: 'Einstellungen',
-            }} 
+            }}
           />
         </Tab.Navigator>
       </NavigationContainer>

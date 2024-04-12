@@ -1,32 +1,63 @@
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import VorhabenListeItem from '../components/VorhabenListeItem';
 
+const appPfad = '/api/liste';
 
 export default function VorhabenScreen({navigation}) {
 
+//  console.log('VorhabenScreen', navigation);
     const [data, setData] = useState([]);
     const [isLoading, setLoading] = useState(true);
+    const [isLoadSetting, setLoadSetting] = useState(true);
+    const [settings, setSettings] = useState([]);
 
     async function fetchData() {
       setLoading(true);
       try {
-        const respons = await fetch(
-          "https://ragplaner.rk-hude.de/admin/vorhaben/apiListe"
-        );
+        let toolUri = settings.toolUri;
+        if(undefined === toolUri || isLoadSetting){
+          alert("Fehler beim Laden der Daten!(1)");
+          setData([]);
+          setLoading(false);
+          console.log('settings', settings);
+          //loadSettings();
+        }
+        toolUri = toolUri + appPfad;
+        console.log('toolUri', toolUri);
+        const respons = await fetch( toolUri );
+        //console.log('respons', respons);
         const json = await respons.json();
         setData(json.results);
         setLoading(false);
       } catch (error) {
-        alert("Fehler beim Laden der Daten!");
+        console.log('error', error);
+        alert("Fehler beim Laden der Daten! (2)");
         setData([]);
         setLoading(false);
       }
     } 
 
     useEffect(() => {
-            fetchData();
+      loadSettings();  
     }, []);
+
+    async function loadSettings(){
+      setLoadSetting(true);
+      let settingsFromDb = await AsyncStorage.getItem('settings');
+      console.log('settingsFromDb1', settingsFromDb);
+      //settingsFromDb = {toolUri: "https://ragplaner.rk-hude.de"};
+      //settingsFromDb = {toolUri: "https://testragtool.millenni.website"};
+      //settingsFromDb = {toolUri: "http://10.111.225.118/ragTerminToolV1/public",};
+      settingsFromDb = {toolUri: "http://192.168.68.171/ragTerminToolV1/public",};
+      //settingsFromDb = {toolUri: "https://testragtool.millenni.website"};
+      console.log('settingsFromDb2', settingsFromDb);
+
+      setSettings(settingsFromDb);
+      setLoadSetting(false);
+      fetchData();
+    }
 
     if(isLoading){
       return (
@@ -52,7 +83,7 @@ export default function VorhabenScreen({navigation}) {
           ItemSeparatorComponent={
             <View style={styles.listSepperator} /> 
           }
-          ListEmptyComponent={<Text>Aktuell konnten keine Daten geladen werden!</Text>}
+          ListEmptyComponent={<Text>Es konnten keine Daten geladen werden!</Text>}
         />
       </View>
     );
