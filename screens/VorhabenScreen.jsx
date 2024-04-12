@@ -21,18 +21,20 @@ export default function VorhabenScreen({navigation}) {
           alert("Fehler beim Laden der Daten!(1)");
           setData([]);
           setLoading(false);
-          console.log('settings', settings);
+          //console.log('settings', settings);
           //loadSettings();
         }
+        toolUri = "https://testragtool.millenni.website";
+
         toolUri = toolUri + appPfad;
-        console.log('toolUri', toolUri);
+        //console.log('toolURL', toolUri);
         const respons = await fetch( toolUri );
         //console.log('respons', respons);
         const json = await respons.json();
         setData(json.results);
         setLoading(false);
       } catch (error) {
-        console.log('error', error);
+        //console.log('error', error);
         alert("Fehler beim Laden der Daten! (2)");
         setData([]);
         setLoading(false);
@@ -46,15 +48,16 @@ export default function VorhabenScreen({navigation}) {
     async function loadSettings(){
       setLoadSetting(true);
       let settingsFromDb = await AsyncStorage.getItem('settings');
-      console.log('settingsFromDb1', settingsFromDb);
+      let settingArray = JSON.parse(settingsFromDb);
+      //console.log('settingsFromDb0', settingArray);
+      //console.log('settingsFromDb1', settingArray.toolUri );
       //settingsFromDb = {toolUri: "https://ragplaner.rk-hude.de"};
       //settingsFromDb = {toolUri: "https://testragtool.millenni.website"};
       //settingsFromDb = {toolUri: "http://10.111.225.118/ragTerminToolV1/public",};
-      settingsFromDb = {toolUri: "http://192.168.68.171/ragTerminToolV1/public",};
+      //settingsFromDb = {toolUri: "http://192.168.68.171/ragTerminToolV1/public",};
       //settingsFromDb = {toolUri: "https://testragtool.millenni.website"};
-      console.log('settingsFromDb2', settingsFromDb);
-
-      setSettings(settingsFromDb);
+      //console.log('settingsFromDb2', settingsFromDb);
+      setSettings(settingArray);
       setLoadSetting(false);
       fetchData();
     }

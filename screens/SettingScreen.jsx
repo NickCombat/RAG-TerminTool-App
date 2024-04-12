@@ -5,6 +5,7 @@ import BigButton from '../components/BigButton.jsx';
 
 export default function SettingScreen() {
     const [tooluri, setTooluri] = useState("");
+    const [settings, setSettings] = useState([]);
 
     function saveSetting() {
         const newTooluri = tooluri.trim();
@@ -14,8 +15,8 @@ export default function SettingScreen() {
 
             return;
         }
-        let settings = [{ toolUri: newTooluri, toolName: newToolName }];
-        //console.log('settingsSave', settings);
+        let settings = { toolUri: newTooluri, toolName: newToolName };
+        console.log('settingsSave', JSON.stringify(settings));
 
         AsyncStorage.setItem('settings', JSON.stringify(settings));
         setTooluri(newTooluri);
@@ -27,12 +28,26 @@ export default function SettingScreen() {
         setTooluri("");
     }
 
+    if(undefined === settings )
+    {
+        loadSettings();
+    }
+
+    async function loadSettings(){
+
+      let settingsFromDb = await AsyncStorage.getItem('settings');
+      let settingArray = JSON.parse(settingsFromDb);
+    
+      setSettings(settingArray);
+    }
+
     return (
         <View style={styles.container}>
             <Text>Einstellungs Liste</Text>
             <SectionList
                 sections={[
                     {title: "Version", data: [{name: "1.1.14"}]},
+                    {title: "App URL", data: [{name: settings.toolUri}]},
                     {
                         title: "Impressum",
                         data: [
@@ -84,7 +99,7 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         padding: 5,
         paddingLeft: 10,
-        fontSize: 24,
+        fontSize: 12,
         marginBottom: 10
     },
     inputText: {
