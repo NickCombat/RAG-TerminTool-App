@@ -7,7 +7,7 @@ const appPfad = '/api/liste';
 
 export default function VorhabenScreen({navigation}) {
 
-//  console.log('VorhabenScreen', navigation);
+    //console.log('VorhabenScreen', navigation);
     const [data, setData] = useState([]);
     const [isLoading, setLoading] = useState(true);
     const [isLoadSetting, setLoadSetting] = useState(true);
@@ -18,7 +18,7 @@ export default function VorhabenScreen({navigation}) {
         try {
             let toolUri = settings.toolUri;
             if (undefined === toolUri || isLoadSetting) {
-                alert("Fehler beim Laden der Daten!(1)");
+                alert("Fehler beim Laden der Daten! (1)");
                 setData([]);
                 setLoading(false);
                 //console.log('undefinedToolUri', settings);
