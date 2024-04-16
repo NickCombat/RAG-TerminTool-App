@@ -21,13 +21,15 @@ export default function VorhabenScreen({navigation}) {
           alert("Fehler beim Laden der Daten!(1)");
           setData([]);
           setLoading(false);
-          //console.log('settings', settings);
+          //console.log('undefinedToolUri', settings);
           //loadSettings();
         }
-        toolUri = "https://testragtool.millenni.website";
-
+        //toolUri = "https://testragtool.millenni.website";
+        if(toolUri.substring(0,4) !== 'http') {
+            toolUri = "http://" + toolUri;
+        }
         toolUri = toolUri + appPfad;
-        //console.log('toolURL', toolUri);
+        //console.log('CallToolURL', toolUri);
         const respons = await fetch( toolUri );
         //console.log('respons', respons);
         const json = await respons.json();
@@ -36,6 +38,7 @@ export default function VorhabenScreen({navigation}) {
       } catch (error) {
         //console.log('error', error);
         alert("Fehler beim Laden der Daten! (2)");
+        //console.log('falscheToolUri', settings);
         setData([]);
         setLoading(false);
       }
@@ -86,7 +89,7 @@ export default function VorhabenScreen({navigation}) {
           ItemSeparatorComponent={
             <View style={styles.listSepperator} /> 
           }
-          ListEmptyComponent={<Text>Es konnten keine Daten geladen werden!</Text>}
+          ListEmptyComponent={<Text style={{textAlign:'center'}}>Es konnten keine Daten geladen werden!(Bitte erneut versuchen.)</Text>}
         />
       </View>
     );

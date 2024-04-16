@@ -13,8 +13,6 @@ const settings = [{toolUri: 'http://192.168.68.171/ragTerminToolV1/public/'}];
 
 function HomeStack(){
 
-    console.log('HomeStack', settings);
-
     return (
         <Stack.Navigator 
             screenOptions={{
@@ -36,8 +34,6 @@ function HomeStack(){
 }
 
 function SettingStack(){
-
-    //console.log('SettingStack', settings);
 
     return (
         <Stack.Navigator 

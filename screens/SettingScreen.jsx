@@ -46,7 +46,7 @@ export default function SettingScreen() {
             <Text>Einstellungs Liste</Text>
             <SectionList
                 sections={[
-                    {title: "Version", data: [{name: "1.1.14"}]},
+                    {title: "Version", data: [{name: "1.1.15"}]},
                     {title: "App URL", data: [{name: settings.toolUri}]},
                     {
                         title: "Impressum",
