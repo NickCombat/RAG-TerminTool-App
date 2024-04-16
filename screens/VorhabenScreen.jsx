@@ -14,80 +14,79 @@ export default function VorhabenScreen({navigation}) {
     const [settings, setSettings] = useState([]);
 
     async function fetchData() {
-      setLoading(true);
-      try {
-        let toolUri = settings.toolUri;
-        if(undefined === toolUri || isLoadSetting){
-          alert("Fehler beim Laden der Daten!(1)");
-          setData([]);
-          setLoading(false);
-          console.log('settings', settings);
-          //loadSettings();
+        setLoading(true);
+        try {
+            let toolUri = settings.toolUri;
+            if (undefined === toolUri || isLoadSetting) {
+                alert("Fehler beim Laden der Daten!(1)");
+                setData([]);
+                setLoading(false);
+                //console.log('undefinedToolUri', settings);
+                //loadSettings();
+            }
+            //toolUri = "https://testragtool.millenni.website";
+            if (toolUri.substring(0, 4) !== 'http') {
+                toolUri = "http://" + toolUri;
+            }
+            toolUri = toolUri + appPfad;
+            //console.log('CallToolURL', toolUri);
+            const respons = await fetch(toolUri);
+            //console.log('respons', respons);
+            const json = await respons.json();
+            setData(json.results);
+            setLoading(false);
+        } catch (error) {
+            //console.log('error', error);
+            alert("Fehler beim Laden der Daten! (2)");
+            //console.log('falscheToolUri', settings);
+            setData([]);
+            setLoading(false);
         }
-        toolUri = toolUri + appPfad;
-        console.log('toolUri', toolUri);
-        const respons = await fetch( toolUri );
-        //console.log('respons', respons);
-        const json = await respons.json();
-        setData(json.results);
-        setLoading(false);
-      } catch (error) {
-        console.log('error', error);
-        alert("Fehler beim Laden der Daten! (2)");
-        setData([]);
-        setLoading(false);
-      }
-    } 
-
-    useEffect(() => {
-      loadSettings();  
-    }, []);
-
-    async function loadSettings(){
-      setLoadSetting(true);
-      let settingsFromDb = await AsyncStorage.getItem('settings');
-      console.log('settingsFromDb1', settingsFromDb);
-      //settingsFromDb = {toolUri: "https://ragplaner.rk-hude.de"};
-      //settingsFromDb = {toolUri: "https://testragtool.millenni.website"};
-      //settingsFromDb = {toolUri: "http://10.111.225.118/ragTerminToolV1/public",};
-      settingsFromDb = {toolUri: "http://192.168.68.171/ragTerminToolV1/public",};
-      //settingsFromDb = {toolUri: "https://testragtool.millenni.website"};
-      console.log('settingsFromDb2', settingsFromDb);
-
-      setSettings(settingsFromDb);
-      setLoadSetting(false);
-      fetchData();
     }
 
-    if(isLoading){
-      return (
-        <View style={styles.center}>
-          <ActivityIndicator size={'large'} color={'darkblue'}/>
-        </View>
-      );
+    useEffect(() => {
+        loadSettings();
+    }, []);
+
+    async function loadSettings() {
+        setLoadSetting(true);
+        let settingsFromDb = await AsyncStorage.getItem('settings');
+        let settingArray = JSON.parse(settingsFromDb);
+        setSettings(settingArray);
+        setLoadSetting(false);
+        fetchData();
+    }
+
+    if (isLoading) {
+        return (
+            <View style={styles.center}>
+                <ActivityIndicator size={'large'} color={'darkblue'}/>
+            </View>
+        );
     }
 
     return (
-      <View style={styles.container}>
-        <FlatList 
-          data={data} 
-          renderItem={({item}) => (
-              <VorhabenListeItem 
-                vorhaben={item} 
-                onPress={() => navigation.navigate('VorhabenDetails', {item})} 
-              />
-            )}
-          keyExtractor={(item) => item.id}  
-          refreshing={isLoading}
-          onRefresh={fetchData}
-          ItemSeparatorComponent={
-            <View style={styles.listSepperator} /> 
-          }
-          ListEmptyComponent={<Text>Es konnten keine Daten geladen werden!</Text>}
-        />
-      </View>
+        <View style={styles.container}>
+            <FlatList
+                data={data}
+                renderItem={({item}) => (
+                    <VorhabenListeItem
+                        vorhaben={item}
+                        onPress={() => navigation.navigate('VorhabenDetails', {item})}
+                    />
+                )}
+                keyExtractor={(item) => item.id}
+                refreshing={isLoading}
+                onRefresh={fetchData}
+                ItemSeparatorComponent={
+                    <View style={styles.listSepperator}/>
+                }
+                ListEmptyComponent={<Text style={{textAlign: 'center'}}>Es konnten keine Daten geladen werden! (Bitte
+                    erneut versuchen.)</Text>}
+            />
+        </View>
     );
-  }
+}
 
   const styles = StyleSheet.create({
     container: {
