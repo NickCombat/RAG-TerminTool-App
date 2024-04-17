@@ -19,27 +19,28 @@ export default function VorhabenScreen({navigation}) {
             let toolUri = settings.toolUri;
             if (undefined === toolUri || isLoadSetting) {
                 alert("Fehler beim Laden der Daten! (1)");
-                setData([]);
+                // setData([]); // Data nich löschen um ggf. offline Daten zu erhalten
                 setLoading(false);
-                //console.log('undefinedToolUri', settings);
+                // console.log('undefinedToolUri', settings);
                 //loadSettings();
             }
-            //toolUri = "https://testragtool.millenni.website";
-            if (toolUri.substring(0, 4) !== 'http') {
-                toolUri = "http://" + toolUri;
+            if (undefined === toolUri) {
+                toolUri = "https://testragtool.millenni.website";
             }
+            setData([]);
             toolUri = toolUri + appPfad;
-            //console.log('CallToolURL', toolUri);
+            // console.log('CallToolURL', toolUri);
             const respons = await fetch(toolUri);
             //console.log('respons', respons);
             const json = await respons.json();
             setData(json.results);
             setLoading(false);
         } catch (error) {
-            //console.log('error', error);
+            // console.log('error', error);
             alert("Fehler beim Laden der Daten! (2)");
-            //console.log('falscheToolUri', settings);
-            setData([]);
+            // console.log('falscheToolUri', settings);
+            // console.log('falscheToolUri', settings.toolUri);
+            // setData([]); // Data nich löschen um ggf. offline Daten zu erhalten
             setLoading(false);
         }
     }

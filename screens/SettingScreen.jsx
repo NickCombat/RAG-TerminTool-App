@@ -32,11 +32,14 @@ export default function SettingScreen() {
             <Text>Einstellungs Liste</Text>
             <SectionList
                 sections={[
-                    {title: "Version", data: [{name: "1.1.14"}]},
+                    {title: "Version", data: [{name: "0.2.5alpha"}]},
                     {
                         title: "Impressum",
                         data: [
-                            {name: "RAG Hude - RAG TerminTool https://rag.rk-hude.de"},
+                            {name: "RAG Hude - RAG TerminTool"},
+                            {name: "https://rag.rk-hude.de"},
+                            {name: "Stefan Röttgers"},
+                            {name: "develop@rk-hude.de"},
                         ],
                     },
                 ]}
@@ -50,7 +53,7 @@ export default function SettingScreen() {
                 style={styles.container}
             >
                 <TextInput
-                    placeholder="Tool URI"
+                    placeholder="http://ragtermintool.rk-hude.de"
                     multiline={true}
                     onChangeText={setTooluri}
                     style={[styles.input, styles.inputText]}
@@ -84,12 +87,12 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         padding: 5,
         paddingLeft: 10,
-        fontSize: 24,
+        fontSize: 16,
         marginBottom: 10
     },
     inputText: {
-        height: 45,
-        textAlignVertical: 'top',
+        height: 30,
+
     },
     add: {
         width: 150,
