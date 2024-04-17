@@ -7,6 +7,7 @@ export default function SettingScreen() {
     const [tooluri, setTooluri] = useState("");
 
     function saveSetting() {
+        setTooluri([]);
         const newTooluri = tooluri.trim();
         const newToolName= tooluri.trim();
         if (0 === newTooluri.length || 0 === newToolName.length) {
@@ -15,7 +16,6 @@ export default function SettingScreen() {
             return;
         }
         let settings = [{ toolUri: newTooluri, toolName: newToolName }];
-        //console.log('settingsSave', settings);
 
         AsyncStorage.setItem('settings', JSON.stringify(settings));
         setTooluri(newTooluri);

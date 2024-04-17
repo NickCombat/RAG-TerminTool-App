@@ -16,13 +16,14 @@ export default function VorhabenScreen({navigation}) {
     async function fetchData() {
         setLoading(true);
         try {
-            let toolUri = settings.toolUri;
+            let toolUri = settings[0].toolUri;
             if (undefined === toolUri || isLoadSetting) {
                 alert("Fehler beim Laden der Daten! (1)");
                 // setData([]); // Data nich löschen um ggf. offline Daten zu erhalten
                 setLoading(false);
                 // console.log('undefinedToolUri', settings);
-                //loadSettings();
+                loadSettings();
+                toolUri = settings[0].toolUri;
             }
             if (undefined === toolUri) {
                 toolUri = "https://testragtool.millenni.website";
@@ -39,7 +40,7 @@ export default function VorhabenScreen({navigation}) {
             // console.log('error', error);
             alert("Fehler beim Laden der Daten! (2)");
             // console.log('falscheToolUri', settings);
-            // console.log('falscheToolUri', settings.toolUri);
+            // console.log('falscheToolUri', settings[0].toolUri);
             // setData([]); // Data nich löschen um ggf. offline Daten zu erhalten
             setLoading(false);
         }
@@ -47,6 +48,7 @@ export default function VorhabenScreen({navigation}) {
 
     useEffect(() => {
         loadSettings();
+        fetchData();
     }, []);
 
     async function loadSettings() {
@@ -54,8 +56,9 @@ export default function VorhabenScreen({navigation}) {
         let settingsFromDb = await AsyncStorage.getItem('settings');
         let settingArray = JSON.parse(settingsFromDb);
         setSettings(settingArray);
+        // console.log('loadSetting', settings);
+        // console.log('loadToolUri', settings[0].toolUri);
         setLoadSetting(false);
-        fetchData();
     }
 
     if (isLoading) {
