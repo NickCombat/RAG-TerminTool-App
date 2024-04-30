@@ -8,29 +8,32 @@ const appPfad = '/api/liste';
 export default function VorhabenScreen({navigation}) {
 
     //console.log('VorhabenScreen', navigation);
+    const testUrl = "https://testragtool.millenni.website";
     const [data, setData] = useState([]);
     const [isLoading, setLoading] = useState(true);
     const [isLoadSetting, setLoadSetting] = useState(true);
     const [settings, setSettings] = useState([]);
 
     async function fetchData() {
-        setLoading(true);
         try {
+            if(null === settings){
+                loadSettings();
+            }
             let toolUri = settings[0].toolUri;
             if (undefined === toolUri || isLoadSetting) {
                 alert("Fehler beim Laden der Daten! (1)");
-                // setData([]); // Data nich löschen um ggf. offline Daten zu erhalten
+                // setData([]); // Data nich lÃ¶schen um ggf. offline Daten zu erhalten
                 setLoading(false);
                 // console.log('undefinedToolUri', settings);
                 loadSettings();
                 toolUri = settings[0].toolUri;
             }
             if (undefined === toolUri) {
-                toolUri = "https://testragtool.millenni.website";
+                toolUri = testUrl;
             }
-            setData([]);
+            //setData([]);
             toolUri = toolUri + appPfad;
-            // console.log('CallToolURL', toolUri);
+            //console.log('CallToolURL', toolUri);
             const respons = await fetch(toolUri);
             //console.log('respons', respons);
             const json = await respons.json();
@@ -41,7 +44,7 @@ export default function VorhabenScreen({navigation}) {
             alert("Fehler beim Laden der Daten! (2)");
             // console.log('falscheToolUri', settings);
             // console.log('falscheToolUri', settings[0].toolUri);
-            // setData([]); // Data nich löschen um ggf. offline Daten zu erhalten
+            // setData([]); // Data nich lÃ¶schen um ggf. offline Daten zu erhalten
             setLoading(false);
         }
     }
@@ -55,6 +58,9 @@ export default function VorhabenScreen({navigation}) {
         setLoadSetting(true);
         let settingsFromDb = await AsyncStorage.getItem('settings');
         let settingArray = JSON.parse(settingsFromDb);
+        if(null === settingArray){
+            settingArray = [{'toolUri': toolUri}];
+        }
         setSettings(settingArray);
         // console.log('loadSetting', settings);
         // console.log('loadToolUri', settings[0].toolUri);

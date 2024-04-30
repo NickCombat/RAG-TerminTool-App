@@ -7,7 +7,7 @@ export default function SettingScreen() {
     const [tooluri, setTooluri] = useState("");
 
     function saveSetting() {
-        setTooluri([]);
+        setTooluri("");
         const newTooluri = tooluri.trim();
         const newToolName= tooluri.trim();
         if (0 === newTooluri.length || 0 === newToolName.length) {
@@ -32,7 +32,7 @@ export default function SettingScreen() {
             <Text>Einstellungs Liste</Text>
             <SectionList
                 sections={[
-                    {title: "Version", data: [{name: "0.2.5alpha"}]},
+                    {title: "Version", data: [{name: "0.2.7alpha"}]},
                     {
                         title: "Impressum",
                         data: [
