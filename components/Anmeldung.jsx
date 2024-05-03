@@ -37,15 +37,11 @@ export default function Anmeldung(probs) {
                 alert( 'Keine URL in Settings');
                 console.error(settings);
             }
-            const toolUri = settings[0].toolUri + "/api/anmelden/" + anmeldeId;
+            const toolUri = settings[0].toolUri + "/api/anmelden/" + anmeldeId + "?name=" + anmeldung.name + "vorname=" + anmeldung.vorname;
             console.log('toolUri', toolUri);
         
             const response = await fetch(toolUri, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(anmeldung)
+                method: "GET"
             });
             const json = await response.json();
 
