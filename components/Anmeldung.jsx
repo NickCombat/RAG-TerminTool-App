@@ -43,10 +43,9 @@ export default function Anmeldung(probs) {
             const response = await fetch(toolUri, {
                 method: "POST",
                 headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
+                    "Content-Type": "application/json",
                 },
-                body: JSON.stringify({anmeldung})
+                body: JSON.stringify(anmeldung)
             });
             const json = await response.json();
 
@@ -58,6 +57,7 @@ export default function Anmeldung(probs) {
         {
             alert("Die Anmeldung konnte nicht versendet werden.");
             console.error(error);
+            console.log('jsonjson', json);
         }
         setAnmeldungProcess(false);
     }
@@ -86,7 +86,7 @@ export default function Anmeldung(probs) {
             <View
                 style={styles.center}
                 // :style={{styles.error}}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            >
+            >                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      >
                 <Text>{anmeldeText}</Text>
             </View>
         );

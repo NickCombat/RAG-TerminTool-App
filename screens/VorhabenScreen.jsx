@@ -16,15 +16,13 @@ export default function VorhabenScreen({navigation}) {
 
     async function fetchData() {
         try {
-            if(null === settings){
-                loadSettings();
-            }
+            loadSettings();
             let toolUri = settings[0].toolUri;
             if (undefined === toolUri || isLoadSetting) {
                 alert("Fehler beim Laden der Daten! (1)");
                 // setData([]); // Data nich löschen um ggf. offline Daten zu erhalten
                 setLoading(false);
-                // console.log('undefinedToolUri', settings);
+                console.log('undefinedToolUri', settings);
                 loadSettings();
                 toolUri = settings[0].toolUri;
             }
@@ -33,24 +31,22 @@ export default function VorhabenScreen({navigation}) {
             }
             //setData([]);
             toolUri = toolUri + appPfad;
-            //console.log('CallToolURL', toolUri);
+            // console.log('CallToolURL', toolUri);
             const respons = await fetch(toolUri);
             //console.log('respons', respons);
             const json = await respons.json();
             setData(json.results);
-            setLoading(false);
         } catch (error) {
-            // console.log('error', error);
+            console.error('setting error', error);
             alert("Fehler beim Laden der Daten! (2)");
-            // console.log('falscheToolUri', settings);
-            // console.log('falscheToolUri', settings[0].toolUri);
+            // console.error('falscheToolUri', settings);
+            // console.error('falscheToolUri', settings[0].toolUri);
             // setData([]); // Data nich löschen um ggf. offline Daten zu erhalten
-            setLoading(false);
         }
+        setLoading(false);
     }
 
     useEffect(() => {
-        loadSettings();
         fetchData();
     }, []);
 
