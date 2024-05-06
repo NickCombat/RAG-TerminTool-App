@@ -32,7 +32,7 @@ export default function SettingScreen() {
             <Text>Einstellungs Liste</Text>
             <SectionList
                 sections={[
-                    {title: "Version", data: [{name: "0.2.7alpha"}]},
+                    {title: "Version", data: [{name: "0.2.14alpha"}]},
                     {
                         title: "Impressum",
                         data: [
@@ -53,7 +53,7 @@ export default function SettingScreen() {
                 style={styles.container}
             >
                 <TextInput
-                    placeholder="http://ragtermintool.rk-hude.de"
+                    placeholder="https://ragtermintool.rk-hude.de"
                     multiline={true}
                     onChangeText={setTooluri}
                     style={[styles.input, styles.inputText]}

@@ -29,7 +29,7 @@ export default function VorhabenScreen({navigation}) {
             if (undefined === toolUri) {
                 toolUri = testUrl;
             }
-            //setData([]);
+            //setData([]);  // Data nich löschen um offline Daten zu erhalten.
             toolUri = toolUri + appPfad;
             // console.log('CallToolURL', toolUri);
             const respons = await fetch(toolUri);
@@ -38,10 +38,11 @@ export default function VorhabenScreen({navigation}) {
             setData(json.results);
         } catch (error) {
             console.error('setting error', error);
-            alert("Fehler beim Laden der Daten! (2)");
+            alert("Fehler beim Laden der Daten!");
+            console.error(error);
             // console.error('falscheToolUri', settings);
             // console.error('falscheToolUri', settings[0].toolUri);
-            // setData([]); // Data nich löschen um ggf. offline Daten zu erhalten
+            // setData([]); // Data nich löschen um ggf. offline Daten zu erhalten.
         }
         setLoading(false);
     }

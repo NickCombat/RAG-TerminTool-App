@@ -9,7 +9,7 @@ export default function Anmeldung(probs) {
     const [isAnmeldungProcess, setAnmeldungProcess] = useState(false);
     const [isLoadSetting, setLoadSetting] = useState(true);
     const [anmeldeStatus, setAnmeldeStatus] = useState(null);
-    const [anmeldeText, setAnmeldeText] = useState(true);
+    const [anmeldeText, setAnmeldeText] = useState(null);
     const [anmeldeVorname, setAnmeldeVorname] = useState("");
     const [anmeldeName, setAnmeldeName] = useState("");
     const trackedVorname = (text) => {
@@ -26,34 +26,30 @@ export default function Anmeldung(probs) {
     async function sendeAnmeldung(anmeldung){
 
         setAnmeldungProcess(true);
+        setAnmeldeStatus('error');
         loadSettings();
         try{
-            console.log('sendeAnmeldung', anmeldung);
-            if(undefined === settings){
+            if(!settings){
                 loadSettings();
-                console.error(settings);
             }
-            if(undefined === settings[0].toolUri){
+            if(!settings[0].toolUri){
                 alert( 'Keine URL in Settings');
-                console.error(settings);
+                loadSettings();
             }
-            const toolUri = settings[0].toolUri + "/api/anmelden/" + anmeldeId + "?name=" + anmeldung.name + "vorname=" + anmeldung.vorname;
-            console.log('toolUri', toolUri);
-        
+            const toolUri = settings[0].toolUri + "/api/anmelden/" + anmeldeId + "?name=" + anmeldung.name + "&vorname=" + anmeldung.vorname;
+
             const response = await fetch(toolUri, {
                 method: "GET"
             });
             const json = await response.json();
-
-            console.log('jsonjson', json);
-            setAnmeldeStatus(json.success);
+            setAnmeldeStatus('gesetzt');
             setAnmeldeText(json.results);
         }
         catch(error)
         {
+            setAnmeldungProcess(false);
             alert("Die Anmeldung konnte nicht versendet werden.");
-            console.error(error);
-            console.log('jsonjson', json);
+            console.error('Error: ', error);
         }
         setAnmeldungProcess(false);
     }
@@ -77,13 +73,12 @@ export default function Anmeldung(probs) {
         setLoadSetting(false);
     }
 
-    if (null!==anmeldeStatus) {
+    if (null!==anmeldeText) {
         return (
             <View
                 style={styles.center}
-                // :style={{styles.error}}
-            >                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      >
-                <Text>{anmeldeText}</Text>
+            >
+                <Text style={styles.anmeldeStatus}>{anmeldeText}</Text>
             </View>
         );
     }
@@ -123,14 +118,19 @@ const styles = StyleSheet.create({
         borderColor: '#000',
         borderWidth: 1,
     },
-    center:{
-   //     flex: 1,
-//justifyContent: 'center',
-  //      alignItems: 'center',
+    center: {
+        // flex: 1,
+        // justifyContent: 'center',
+        // alignItems: 'center',
+    },
+    gesetzt:{
+        color: '#fff',
+        backgroundColor: '#74cc5c',
+        marginTop: 10,
     },
     error:{
         color: '#fff',
-        backgroundColor: '#999',
+        backgroundColor: '#d57070',
         marginTop: 10,
     },
   });
