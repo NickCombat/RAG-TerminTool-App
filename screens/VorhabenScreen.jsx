@@ -3,46 +3,57 @@ import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-nativ
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import VorhabenListeItem from '../components/VorhabenListeItem';
 
+const testUrl = "https://testragtool.millenni.website";
 const appPfad = '/api/liste';
 
 export default function VorhabenScreen({navigation}) {
 
     //console.log('VorhabenScreen', navigation);
-    const testUrl = "https://testragtool.millenni.website";
     const [data, setData] = useState([]);
     const [isLoading, setLoading] = useState(true);
     const [isLoadSetting, setLoadSetting] = useState(true);
     const [settings, setSettings] = useState([]);
 
+
     async function fetchData() {
-        try {
+
+        let toolUri = '';
+        try{
             loadSettings();
-            let toolUri = settings[0].toolUri;
-            if (undefined === toolUri || isLoadSetting) {
+            toolUri = settings[0].toolUri;
+        }
+        catch (error){
+            toolUri = testUrl;
+            console.log('testUrl ', toolUri);
+        }
+        try{
+            if (!toolUri || isLoadSetting) {
                 alert("Fehler beim Laden der Daten! (1)");
                 // setData([]); // Data nich löschen um ggf. offline Daten zu erhalten
                 setLoading(false);
-                console.log('undefinedToolUri', settings);
+                // console.error('undefinedToolUri', settings);
                 loadSettings();
                 toolUri = settings[0].toolUri;
             }
-            if (undefined === toolUri) {
+            if (!toolUri) {
                 toolUri = testUrl;
+                // console.error('ToolUri1 ', toolUri);
             }
             //setData([]);  // Data nich löschen um offline Daten zu erhalten.
             toolUri = toolUri + appPfad;
+            console.log('toolUri ', toolUri);
+        }catch(error){
+            console.error('setting: ', error);
+        }
+        try {
             // console.log('CallToolURL', toolUri);
             const respons = await fetch(toolUri);
             //console.log('respons', respons);
             const json = await respons.json();
             setData(json.results);
         } catch (error) {
-            console.error('setting error', error);
-            alert("Fehler beim Laden der Daten!");
+            alert("Fehler beim Laden der Daten! \n[ " + error + " ]");
             console.error(error);
-            // console.error('falscheToolUri', settings);
-            // console.error('falscheToolUri', settings[0].toolUri);
-            // setData([]); // Data nich löschen um ggf. offline Daten zu erhalten.
         }
         setLoading(false);
     }
@@ -100,7 +111,7 @@ export default function VorhabenScreen({navigation}) {
         flex: 1,
         backgroundColor: '#fff',
         justifyContent: 'center',
-        paddingTop: 60,
+        paddingTop: 30,
     },
     center:{
         flex: 1,
@@ -110,7 +121,7 @@ export default function VorhabenScreen({navigation}) {
     },
     listSepperator:
     {
-      height: StyleSheet.hairlineWidth, 
+      borderWidth: StyleSheet.hairlineWidth,
       backgroundColor: 'lightblue'
     }, 
     listEmpty:

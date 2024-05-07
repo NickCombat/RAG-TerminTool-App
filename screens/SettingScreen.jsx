@@ -12,7 +12,6 @@ export default function SettingScreen() {
         const newToolName= tooluri.trim();
         if (0 === newTooluri.length || 0 === newToolName.length) {
             alert("Die Eingabe Felder müssen beide gefüllt werden.");
-
             return;
         }
         let settings = [{ toolUri: newTooluri, toolName: newToolName }];
@@ -32,7 +31,7 @@ export default function SettingScreen() {
             <Text>Einstellungs Liste</Text>
             <SectionList
                 sections={[
-                    {title: "Version", data: [{name: "0.2.14alpha"}]},
+                    {title: "Version", data: [{name: "0.2.19alpha"}]},
                     {
                         title: "Impressum",
                         data: [
@@ -54,7 +53,7 @@ export default function SettingScreen() {
             >
                 <TextInput
                     placeholder="https://ragtermintool.rk-hude.de"
-                    multiline={true}
+                    multiline={false}
                     onChangeText={setTooluri}
                     style={[styles.input, styles.inputText]}
                 />
@@ -84,19 +83,19 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: 'gray',
         width: 300,
+        height: 40,
         textAlign: 'left',
-        padding: 5,
-        paddingLeft: 10,
+        paddingVertical: 5,
+        paddingLeft: 5,
         fontSize: 16,
         marginBottom: 10
     },
     inputText: {
-        height: 30,
+        height: 28,
 
     },
     add: {
         width: 150,
-        padding: 10,
         borderWidth: 1,
     },
     cancel: {

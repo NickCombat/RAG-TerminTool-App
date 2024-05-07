@@ -23,5 +23,6 @@ const styles = StyleSheet.create({
     buttontext: {
         color: 'gray',
         fontSize: 18,
+        textAlign: 'center',
     },
 });

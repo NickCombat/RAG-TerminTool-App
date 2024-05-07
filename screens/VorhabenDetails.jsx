@@ -22,9 +22,10 @@ export default function VorhabenDetails({navigation, route}) {
           <Text>Bemerkung: {item.bemerkung} </Text>
           <Text>Frist:  {item.frist_datum}</Text>
           <Text>Zeit: {item.von_datum} {item.von_zeit} - {item.bis_zeit}</Text>
-          <Text style={{textAlign: 'left', marginLeft:25}}>freie Plätze: {item.plaetze - item.plaetzebelegt}</Text>
-          <Text style={{textAlign: 'left', marginLeft:25}}>offene Anfragen: {item.plaetzeAngefragt}</Text>
-          <Text style={{textAlign: 'left', marginLeft:25}}>belegte Plätze: {item.plaetzebelegt}</Text>
+          <Text style={styles.plaetzeBlock}>freie Plätze: {item.plaetze - item.plaetzebelegt}</Text>
+          <Text style={styles.plaetzeBlock}>offene Anfragen: {item.plaetzeAngefragt}</Text>
+          <Text style={styles.plaetzeBlock}>belegte Plätze: {item.plaetzebelegt}</Text>
+          <Text style={styles.spaceLine}></Text>
           { isAnmelden ? <Anmeldung vorhabenId={item.id} /> : <Button title="Anmeldung" onPress={onClick}/> }
         </View>
       </ScrollView>
@@ -33,6 +34,7 @@ export default function VorhabenDetails({navigation, route}) {
 
   const styles = StyleSheet.create({
     container: {
+        fontSize: 40,
         flex: 1,
         backgroundColor: '#fff',
         alignItems: 'center',
@@ -40,6 +42,13 @@ export default function VorhabenDetails({navigation, route}) {
     },
     viewBlock: {
       justifyContent: 'left',
+    },
+    plaetzeBlock: {
+        textAlign: 'left',
+        marginLeft:25
+    },
+    spaceLine:{
+
     },
     image: {
         width: 50, 

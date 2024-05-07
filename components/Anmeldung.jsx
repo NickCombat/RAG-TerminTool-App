@@ -2,6 +2,9 @@ import {useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StyleSheet, View, Text, TextInput, Button, ActivityIndicator } from 'react-native';
 
+const testUrl = "https://testragtool.millenni.website";
+const appPfad = '/api/anmelden/';
+
 export default function Anmeldung(probs) {
 
     const anmeldeId = probs.vorhabenId;
@@ -27,20 +30,33 @@ export default function Anmeldung(probs) {
 
         setAnmeldungProcess(true);
         setAnmeldeStatus('error');
-        loadSettings();
+        let toolUri = '';
         try{
-            if(!settings){
-                loadSettings();
-            }
-            if(!settings[0].toolUri){
-                alert( 'Keine URL in Settings');
-                loadSettings();
-            }
-            const toolUri = settings[0].toolUri + "/api/anmelden/" + anmeldeId + "?name=" + anmeldung.name + "&vorname=" + anmeldung.vorname;
+            loadSettings();
+            toolUri = settings[0].toolUri;
+        }
+        catch (error){
+            toolUri = testUrl;
+            console.log('testUrl ', toolUri);
+        }
+        alert("toolUri: \n[" + toolUri + "]");
 
-            const response = await fetch(toolUri, {
-                method: "GET"
-            });
+        try{
+            if (!toolUri || isLoadSetting) {
+                alert("Fehler beim Laden der Daten! (1)");
+                loadSettings();
+                toolUri = settings[0].toolUri;
+            }
+            if (!toolUri) {
+                toolUri = testUrl;
+            }
+            toolUri = toolUri + appPfad + anmeldeId + "?name=" + anmeldung.name + "&vorname=" + anmeldung.vorname;
+        }catch(error){
+            console.error('setting: ', error);
+        }
+
+        try{
+            const response = await fetch(toolUri,{method: "GET"});
             const json = await response.json();
             setAnmeldeStatus('gesetzt');
             setAnmeldeText(json.results);
@@ -49,7 +65,7 @@ export default function Anmeldung(probs) {
         {
             setAnmeldungProcess(false);
             alert("Die Anmeldung konnte nicht versendet werden.");
-            console.error('Error: ', error);
+            console.error('anmeldung: ', error);
         }
         setAnmeldungProcess(false);
     }
@@ -67,7 +83,7 @@ export default function Anmeldung(probs) {
         let settingsFromDb = await AsyncStorage.getItem('settings');
         let settingArray = JSON.parse(settingsFromDb);
         if(null === settingArray){
-            settingArray = [{'toolUri': toolUri}];
+            settingArray = [{'toolUri': testUrl}];
         }
         setSettings(settingArray);
         setLoadSetting(false);
@@ -119,9 +135,17 @@ const styles = StyleSheet.create({
         borderWidth: 1,
     },
     center: {
-        // flex: 1,
+        //flex: 1,
         // justifyContent: 'center',
         // alignItems: 'center',
+    },
+    anmeldeStatus:{
+        borderWidth: 1,
+        borderStyle: 'solid',
+        borderColor: '#000',
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+        marginTop: 10,
     },
     gesetzt:{
         color: '#fff',
